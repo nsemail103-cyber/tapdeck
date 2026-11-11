@@ -1,0 +1,15 @@
+server:
+  port: 8081
+
+app:
+  deck:
+    # Sprint 1 uses a fixed token. QR pairing replaces this in Sprint 5.
+    token: ${DECK_TOKEN:dev-token}
+    # robot = java.awt.Robot on the user's PC; mock = log/record only (tests, headless).
+    executor: ${DECK_EXECUTOR:robot}
+    # Directory holding deck.json (deck definition) and icons/.
+    data-dir: ${DECK_DATA_DIR:./data}
+
+logging:
+  level:
+    jp.aibou.deck: INFO

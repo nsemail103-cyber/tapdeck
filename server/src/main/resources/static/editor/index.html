@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stream Deck エディタ</title>
+<link rel="stylesheet" href="/editor/style.css">
+</head>
+<body>
+<header>
+  <h1>Stream Deck エディタ</h1>
+  <div class="header-actions">
+    <button id="exportBtn" type="button">エクスポート</button>
+    <label class="file-btn">インポート<input id="importFile" type="file" accept=".json,application/json" hidden></label>
+    <button id="saveBtn" type="button" class="primary">保存（クライアントへ再配信）</button>
+  </div>
+</header>
+<p id="status" class="status">読み込み中…</p>
+
+<section class="bar">
+  <label>プロファイル
+    <select id="profileSelect"></select>
+  </label>
+  <button id="addProfileBtn" type="button">＋プロファイル</button>
+  <button id="renameProfileBtn" type="button">名前変更</button>
+  <button id="deleteProfileBtn" type="button">削除</button>
+</section>
+
+<section class="bar">
+  <div id="pageTabs" class="tabs"></div>
+  <button id="addPageBtn" type="button">＋ページ</button>
+  <label>ページ名 <input id="pageName" type="text" size="12"></label>
+  <label>行 <input id="pageRows" type="number" min="1" max="8"></label>
+  <label>列 <input id="pageCols" type="number" min="1" max="8"></label>
+  <button id="deletePageBtn" type="button">このページを削除</button>
+</section>
+
+<main>
+  <div id="grid" class="grid"></div>
+
+  <form id="keyForm" class="panel">
+    <h2 id="formTitle">キーを選択してください</h2>
+    <label>タイトル <input id="keyTitle" type="text"></label>
+    <label>アイコン種別
+      <select id="iconType">
+        <option value="emoji">絵文字</option>
+        <option value="text">テキスト</option>
+        <option value="image">画像</option>
+      </select>
+    </label>
+    <label id="iconValueRow">アイコン <input id="iconValue" type="text"></label>
+    <label id="iconFileRow" hidden>画像ファイル <input id="iconFile" type="file" accept="image/*"></label>
+
+    <label>アクション種別
+      <select id="actionType">
+        <option value="hotkey">ホットキー</option>
+        <option value="text">テキスト貼り付け</option>
+        <option value="launch">アプリ起動</option>
+        <option value="open">URL・ファイルを開く</option>
+        <option value="media">メディアキー</option>
+        <option value="delay">待機（ディレイ）</option>
+        <option value="multi">マルチアクション</option>
+      </select>
+    </label>
+    <div id="actionFields"></div>
+
+    <div class="form-actions">
+      <button id="applyKeyBtn" type="button" class="primary">このキーを反映</button>
+      <button id="deleteKeyBtn" type="button">このキーを削除</button>
+    </div>
+    <p class="hint">「反映」は画面上の下書きへの反映です。最後に右上の「保存」を押すとサーバーへ保存され、接続中のスマホへ自動で再配信されます。</p>
+  </form>
+</main>
+
+<script src="/editor/editor.js"></script>
+</body>
+</html>

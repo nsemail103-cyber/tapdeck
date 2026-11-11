@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>スマホをペアリング</title>
+<style>
+  body { margin: 0; padding: 24px; font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+         background: #17181c; color: #e8e9eb; text-align: center; }
+  h1 { font-size: 20px; }
+  img { background: #fff; border-radius: 12px; padding: 10px; width: 300px; height: 300px; }
+  .url { word-break: break-all; color: #9fd49f; font-size: 13px; max-width: 560px; margin: 12px auto; }
+  button { background: #2f6fed; color: #fff; border: 0; border-radius: 8px; padding: 9px 16px; cursor: pointer; font-size: 14px; }
+  .note { color: #8a8f9c; font-size: 13px; }
+  ul { display: inline-block; text-align: left; color: #b9bdc7; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>スマホをペアリング</h1>
+<p>スマホのカメラでQRコードを読み取ってください（有効期限5分・1回限り）。</p>
+<img id="qr" alt="ペアリング用QRコード">
+<p class="url" id="primaryUrl"></p>
+<div id="otherUrls"></div>
+<button id="reloadBtn" type="button">新しいコードを発行</button>
+<p class="note">このページはこのPCからだけ開けます。読み取り後はスマホ側に接続トークンが保存され、次回からは自動で接続します。</p>
+<script>
+"use strict";
+async function load(force) {
+  const res = await fetch("/api/pairing" + (force ? "?force=true" : ""));
+  if (!res.ok) { document.getElementById("primaryUrl").textContent = "発行に失敗しました: " + res.status; return; }
+  const data = await res.json();
+  document.getElementById("qr").src = "/api/pairing/qr.png?t=" + Date.now();
+  document.getElementById("primaryUrl").textContent = data.primaryUrl;
+  const others = data.urls.filter((u) => u !== data.primaryUrl);
+  document.getElementById("otherUrls").innerHTML =
+    others.length ? "<p class='note'>つながらない場合はこちら:</p><ul>" +
+      others.map((u) => "<li class='url'>" + u + "</li>").join("") + "</ul>" : "";
+}
+document.getElementById("reloadBtn").addEventListener("click", () => load(true));
+load(false);
+</script>
+</body>
+</html>
